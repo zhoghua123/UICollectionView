@@ -1,6 +1,6 @@
 # UICollectionView
 UICollectionView的详细使用
-1.tableView与collectionView比较
+1. tableView与collectionView比较
 相同点:
 1>.都是通过datasource和delegate驱动的(datasource和delegate)，因此在使用的时候必须实现数据源与代理协议方法;
 2>.性能上都实现了循环利用的优化。
