@@ -33,7 +33,7 @@ minimumInteritemSpacing 设置垂直间距 <br>
 同一行有不同的size的cell.由于高度不同,那么最小行间距就是本行最高的cell距离下一行最高cell的间距 <br>
 同理,同一列有不同size的cell,由于宽度不同,那么最大列间距就是本列最宽cell距离下一列最宽cell的间距 <br>
 
-![ ](https://github.com/zhoghua123/UICollectionView/raw/master/image/img1.png)
+![ ](https://github.com/zhoghua123/UICollectionView/raw/master/image/img2.png)
 
 情况2: <br>
 cell的itemsize已经设置固定,行间距再固定,那么界面排版就冲突,因此设置最小间距 <br>
