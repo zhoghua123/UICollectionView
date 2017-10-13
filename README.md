@@ -1,9 +1,9 @@
 # UICollectionView
 UICollectionView的详细使用
-1. tableView与collectionView比较 <br>
+1. tableView与collectionView比较
 相同点:
-1>.都是通过datasource和delegate驱动的(datasource和delegate)，因此在使用的时候必须实现数据源与代理协议方法;
-2>.性能上都实现了循环利用的优化。
+        1>.都是通过datasource和delegate驱动的(datasource和delegate)，因此在使用的时候必须实现数据源与代理协议方法;
+2>.性能上都实现了循环利用的优化。<br>
 不同点:
 1>.UITableView的cell是系统自动布局好的，不需要我们布局。但UICollectionView的cell是需要我们自己布局的。所以我们在创建UICollectionView的时候必须传递一个布局参数，系统提供并实现了一个布局样式：流水布局(UICollectionViewFlowLayout)
 2>UITableViewController的self.view == self.tableview;,但UICollectionViewController的self.view != self.collectionView；
