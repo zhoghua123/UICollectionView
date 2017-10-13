@@ -64,4 +64,7 @@ static NSString * const reuseIdentifier = @"Cell";
         keyWindow.rootViewController = VC;
     }
 }
+-(void)dealloc{
+    NSLog(@"对象已经销毁");
+}
 @end
