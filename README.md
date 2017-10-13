@@ -6,7 +6,7 @@ UICollectionView的详细使用
 2>.性能上都实现了循环利用的优化。<br>
 不同点:<br>
 1>.UITableView的cell是系统自动布局好的，不需要我们布局。但UICollectionView的cell是需要我们自己布局的。所以我们在创建UICollectionView的时候必须传递一个布局参数，系统提供并实现了一个布局样式：流水布局(UICollectionViewFlowLayout)  <br>
-2>UITableViewController的self.view == self.tableview;,但UICollectionViewController的self.view != self.collectionView；
+2>UITableViewController的self.view == self.tableview;,但UICollectionViewController的self.view != self.collectionView；<br>
 UICollectionViewController层次结构：控制器View 上面UICollectionView <br>
 3>UITableView的滚动方式只能是垂直方向， UICollectionView既可以垂直滚动，也可以水平滚动； <br>
 4>UICollectionView的cell只能通过注册来确定重用标识符。不能像tableViewcell一样initWith... <br>
@@ -32,10 +32,10 @@ minimumInteritemSpacing 设置垂直间距 <br>
 情况1: <br>
 同一行有不同的size的cell.由于高度不同,那么最小行间距就是本行最高的cell距离下一行最高cell的间距 <br>
 同理,同一列有不同size的cell,由于宽度不同,那么最大列间距就是本列最宽cell距离下一列最宽cell的间距 <br>
-￼
+![ ](https://github.com/zhoghua123/自定义布局的学习/raw/master/image/img1.png)
 情况2: <br>
 cell的itemsize已经设置固定,行间距再固定,那么界面排版就冲突,因此设置最小间距 <br>
-￼
+![ ](https://github.com/zhoghua123/自定义布局的学习/raw/master/image/img2.png)
 //每个cell统一尺寸 <br>
 itemSize cell的尺寸 <br>
 //预估cell的尺寸，ios8之后可以先去预估cell的尺寸，然后去自适应(与tableView相似) <br>
