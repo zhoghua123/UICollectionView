@@ -66,10 +66,5 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 -(void)dealloc{
     NSLog(@"对象已经销毁");
-    
-    
-    
-    
-    
 }
 @end
