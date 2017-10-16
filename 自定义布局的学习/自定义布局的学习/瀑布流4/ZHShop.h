@@ -1,14 +1,14 @@
 //
-//  XMGShop.h
-//  06-瀑布流
+//  ZHShop.h
+//  自定义布局的学习
 //
-//  Created by apple on 14-7-28.
-//  Copyright (c) 2014年 小码哥. All rights reserved.
+//  Created by xyj on 2017/10/16.
+//  Copyright © 2017年 xyj. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface XMGShop : NSObject
+@interface ZHShop : NSObject
 @property (nonatomic, assign) CGFloat w;
 @property (nonatomic, assign) CGFloat h;
 @property (nonatomic, copy) NSString *img;

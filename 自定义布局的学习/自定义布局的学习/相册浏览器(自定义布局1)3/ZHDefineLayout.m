@@ -8,6 +8,7 @@
 
 //
 /*
+ 本次使用布局完全用自定义布局UICollectionViewLayout,不再继承自流水布局UICollectionViewFlowLayout
  继承自最根本的布局UICollectionViewLayout注意以下几点:
  1.cell的所有的attribute对象需要自己创建
  需要重写:layoutAttributesForElementsInRect方法

@@ -17,6 +17,7 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
+    //图片加边框
     self.imageView.layer.borderColor = [UIColor whiteColor].CGColor;
     self.imageView.layer.borderWidth = 10;
 }

@@ -10,7 +10,7 @@
  实现瀑布流的3种方案
  1.view上面添加一个scrollView,接着在添加3列tableView,分别禁止tableView的滚动
  2.view上面添加一个scrollView,在一个一个往scrollView上面添加
- 3.用uiconllectionView
+ 3.用UIConllectionView
  分析可得:瀑布流总是找最短的那个添加,因此不是流水布局,那么自定义布局就要继承自根布局
  
  */
@@ -18,7 +18,7 @@
 #import "ViewController3.h"
 #import "ZHShopViewCell.h"
 #import "MJRefresh.h"
-#import "XMGShop.h"
+#import "ZHShop.h"
 #import "MJExtension.h"
 @interface ViewController3 ()<UICollectionViewDataSource,ZHWaterLayoutDelegate>
 @property (nonatomic,strong) NSMutableArray *dataArray;
@@ -46,7 +46,7 @@ static NSString * const cellID = @"shopcell";
 }
 -(void)newData{
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSArray *aray = [XMGShop objectArrayWithFilename:@"112.plist"];
+        NSArray *aray = [ZHShop objectArrayWithFilename:@"112.plist"];
         [self.dataArray removeAllObjects];
         [self.dataArray addObjectsFromArray:aray];
         [self.collectionView reloadData];
@@ -56,7 +56,7 @@ static NSString * const cellID = @"shopcell";
 }
 -(void)moreData{
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSArray *aray = [XMGShop objectArrayWithFilename:@"112.plist"];
+        NSArray *aray = [ZHShop objectArrayWithFilename:@"112.plist"];
         [self.dataArray addObjectsFromArray:aray];
         [self.collectionView reloadData];
         [self.collectionView.footer endRefreshing];
@@ -74,23 +74,7 @@ static NSString * const cellID = @"shopcell";
     self.collectionView = collection;
     [self.view addSubview:collection];
 }
-#pragma mark - ZHWaterLayoutDelegate
--(CGFloat)waterLayout:(ZHWaterLayout *)waterLayout heightForItemAtIndex:(NSInteger )index andItemWidth:(CGFloat)itemWidth{
-    XMGShop *shop = self.dataArray[index];
-    return itemWidth * shop.h/shop.w;
-}
--(NSInteger)columCountWaterLayout:(ZHWaterLayout *)waterLayout{
-    return 4;
-}
--(CGFloat)columMarginWaterLayout:(ZHWaterLayout *)waterLayout{
-    return 10;
-}
--(CGFloat)rowMarginWaterLayout:(ZHWaterLayout *)waterLayout{
-    return 10;
-}
--(UIEdgeInsets)edgeInsetsWaterLayout:(ZHWaterLayout *)waterLayout{
-    return UIEdgeInsetsMake(10, 10, 10, 10);
-}
+
 #pragma mark - UICollectionViewDataSource
 //必须实现@required:
 //每个section里面有多少个item
@@ -104,5 +88,22 @@ static NSString * const cellID = @"shopcell";
     ZHShopViewCell *item = [collectionView dequeueReusableCellWithReuseIdentifier:cellID forIndexPath:indexPath];
     item.shop = self.dataArray[indexPath.item];
     return item;
+}
+#pragma mark - ZHWaterLayoutDelegate
+-(CGFloat)waterLayout:(ZHWaterLayout *)waterLayout heightForItemAtIndex:(NSInteger )index andItemWidth:(CGFloat)itemWidth{
+    ZHShop *shop = self.dataArray[index];
+    return itemWidth * shop.h/shop.w;
+}
+-(NSInteger)columCountWaterLayout:(ZHWaterLayout *)waterLayout{
+    return 4;
+}
+-(CGFloat)columMarginWaterLayout:(ZHWaterLayout *)waterLayout{
+    return 10;
+}
+-(CGFloat)rowMarginWaterLayout:(ZHWaterLayout *)waterLayout{
+    return 10;
+}
+-(UIEdgeInsets)edgeInsetsWaterLayout:(ZHWaterLayout *)waterLayout{
+    return UIEdgeInsetsMake(10, 10, 10, 10);
 }
 @end

@@ -6,6 +6,7 @@
 //  Copyright © 2017年 xyj. All rights reserved.
 //
 /*
+ 实现主要步骤:
  1.cell的放大缩小
  2.停止滚动时:cell的居中
  UICollectionViewLayoutAttributes-布局属性

@@ -7,7 +7,7 @@
 //
 
 #import "ZHShopViewCell.h"
-#import "XMGShop.h"
+#import "ZHShop.h"
 #import "UIImageView+WebCache.h"
 @interface ZHShopViewCell()
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
@@ -16,7 +16,7 @@
 @end
 @implementation ZHShopViewCell
 
-- (void)setShop:(XMGShop *)shop
+- (void)setShop:(ZHShop *)shop
 {
     _shop = shop;
     // 1.图片

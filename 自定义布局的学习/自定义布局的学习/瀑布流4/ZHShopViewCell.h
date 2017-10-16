@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-@class XMGShop;
+@class ZHShop;
 @interface ZHShopViewCell : UICollectionViewCell
-@property (nonatomic, strong) XMGShop *shop;
+@property (nonatomic, strong) ZHShop *shop;
 @end

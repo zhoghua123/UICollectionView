@@ -5,9 +5,14 @@
 //  Created by xyj on 2017/10/9.
 //  Copyright © 2017年 xyj. All rights reserved.
 //
+//自定义布局有两种方式:
+//1.继承自UICollectionViewLayout
+//2.继承自UICollectionViewFlowLayout
+//如果自定义当然选择第二种,因为第一种并不包含流水功能等各种属性
 #import "ZHCircleLayout.h"
 #import "ViewController.h"
 #import "ZHLineLayout.h"
+#import "ZHDefineLayout.h"
 #import "ZHCollectionViewCell.h"
 #import "CollectionViewController2.h"
 @interface ViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource>
@@ -40,19 +45,19 @@ static NSString *cellID = @"itemcell";
     collection.delegate = self;
     [self.view addSubview:collection];
     self.collectionView = collection;
-    //自定义布局有两种方式:
-    //1.继承自UICollectionViewLayout
-    //2.继承自UICollectionViewFlowLayout
-    //如果自定义当然选择第二种,因为第一种并不包含流水功能等各种属性
+   
 }
-
+//布局间的切换
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
 //    CollectionViewController2 *collectVC = [[CollectionViewController2 alloc] init];
 //    [self presentViewController:collectVC animated:YES completion:nil];
     //看完自定义布局3之后在看下面这个!!切换布局
     if ([self.collectionView.collectionViewLayout isKindOfClass:[ZHLineLayout class]]) {
         [self.collectionView setCollectionViewLayout:[[ZHCircleLayout alloc] init] animated:YES];
-    } else {
+    }else if([self.collectionView.collectionViewLayout isKindOfClass:[ZHCircleLayout class]]) {
+         [self.collectionView setCollectionViewLayout:[[ZHDefineLayout alloc] init] animated:YES];
+    }
+    else if([self.collectionView.collectionViewLayout isKindOfClass:[ZHDefineLayout class]]) {
         ZHLineLayout *layout = [[ZHLineLayout alloc] init];
         layout.itemSize = CGSizeMake(150, 150);
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
@@ -89,6 +94,7 @@ static NSString *cellID = @"itemcell";
     return item;
 }
 #pragma mark - UICollectionViewDeletegate
+//点击图片删除图片
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     [self.imageArray removeObjectAtIndex:indexPath.item];
     [self.collectionView deleteItemsAtIndexPaths:@[indexPath]];
