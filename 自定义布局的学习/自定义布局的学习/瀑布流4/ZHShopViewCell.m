@@ -16,8 +16,7 @@
 @end
 @implementation ZHShopViewCell
 
-- (void)setShop:(ZHShop *)shop
-{
+- (void)setShop:(ZHShop *)shop{
     _shop = shop;
     // 1.图片
     [self.imageView sd_setImageWithURL:[NSURL URLWithString:shop.img] placeholderImage:[UIImage imageNamed:@"loading"]];
