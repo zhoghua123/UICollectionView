@@ -13,6 +13,7 @@
 @implementation CollectionViewController
 static NSString * const reuseIdentifier = @"Cell";
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     //可以看到self.view != self.collectionView
@@ -20,7 +21,9 @@ static NSString * const reuseIdentifier = @"Cell";
     self.collectionView.backgroundColor = [UIColor greenColor];
     //取消弹簧效果
     self.collectionView.bounces = NO;
+    //水平方向的滚动条
     self.collectionView.showsHorizontalScrollIndicator = NO;
+    //分页滚动
     self.collectionView.pagingEnabled = YES;
     //1.必须通过注册cell
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
@@ -55,7 +58,11 @@ static NSString * const reuseIdentifier = @"Cell";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     //自定义cell,在cell里面放一张图片即可(略)
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    [cell.contentView addSubview:[UISwitch new]];
+    if (![cell.contentView viewWithTag:-100]) {
+        UISwitch *sw = UISwitch.new;
+        sw.tag = -100;
+        [cell.contentView addSubview:[UISwitch new]];
+    }
     cell.backgroundColor = [UIColor blueColor];
     return cell;
 }

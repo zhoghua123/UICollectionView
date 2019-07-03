@@ -33,7 +33,7 @@
 }
 -(void)prepareLayout{
     [super prepareLayout];
-    //计算出所有cell的UICollectionViewLayoutAttributes
+    //1. 计算出所有cell的UICollectionViewLayoutAttributes
     [self.attriArray removeAllObjects];
     //拿到collectionView的所有的cell个数,这里只考虑一个section,多组两重for循环
     //多少组
@@ -74,7 +74,7 @@
     //既然没有,那就需要我们自己创建了
     return self.attriArray;
 }
-//因为你是空白继承,需要告诉他collectionView的contentsize才能滚动
+//2. 因为你是空白继承,需要告诉他collectionView的contentsize才能滚动
 -(CGSize)collectionViewContentSize{
     //那一组多少个
     NSInteger rowcount = [self.collectionView numberOfItemsInSection:0];
@@ -86,7 +86,7 @@
 }
 
 /**
- 返回每一个cell的布局属性
+ 3. 返回每一个cell的布局属性
  要是切换布局的话这个方法必须实现,否则报错
  不切换可以不实现
  */

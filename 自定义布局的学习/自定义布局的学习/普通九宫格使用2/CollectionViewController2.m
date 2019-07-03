@@ -21,6 +21,7 @@ static NSString * const reuseIdentifierHeader = @"header";
 static NSString * const reuseIdentifierFooter = @"footer";
 - (void)viewDidLoad {
     [super viewDidLoad];
+    //用于查看self.view != self.collectionView
     self.view.backgroundColor = [UIColor redColor];
     self.collectionView.backgroundColor = [UIColor greenColor];
     //1.必须注册cell

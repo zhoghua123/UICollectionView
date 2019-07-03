@@ -15,8 +15,8 @@
 #import "ZHDefineLayout.h"
 #import "ZHCollectionViewCell.h"
 #import "CollectionViewController2.h"
-@interface ViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource>
-@property (nonatomic,strong) UICollectionView *collectionView;
+@interface ViewController ()<UICollectionViewDataSource,UICollectionViewDelegate>
+@property (nonatomic,weak) UICollectionView *collectionView;
 @property (nonatomic,strong) NSMutableArray *imageArray;
 @end
 static NSString *cellID = @"itemcell";
@@ -25,21 +25,25 @@ static NSString *cellID = @"itemcell";
     if (_imageArray == nil) {
         _imageArray = [NSMutableArray array];
         for (int i = 0 ;i<20; i++) {
-            [_imageArray addObject:[NSString stringWithFormat:@"%zd",i+1]];
+            [_imageArray addObject:[NSString stringWithFormat:@"%d",i+1]];
         }
     }
     return _imageArray ;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    //1. 初始化自定义布局：ZHLineLayout
     CGFloat collectionWH = [UIScreen mainScreen].bounds.size.width;
     CGRect frame = CGRectMake(0, 200, collectionWH, 300);
     ZHLineLayout *layout = [[ZHLineLayout alloc] init];
     layout.itemSize = CGSizeMake(150, 150);//设置item的尺寸
+    //水平滚动
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    
+    //2. 初始化UICollectionView
     UICollectionView *collection = [[UICollectionView alloc] initWithFrame:frame collectionViewLayout:layout];
     //只能注册
-    [collection registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:cellID];
+//    [collection registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:cellID];
     [collection registerNib:[UINib nibWithNibName:@"ZHCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:cellID];
     collection.dataSource = self;
     collection.delegate = self;
