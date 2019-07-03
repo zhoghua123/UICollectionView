@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0482D9DE22CC9FDF008948E6 /* ZHMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0482D9DD22CC9FDF008948E6 /* ZHMenuViewController.m */; };
+		0482D9E122CCAE32008948E6 /* ZHCollectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0482D9E022CCAE32008948E6 /* ZHCollectionHeaderView.m */; };
+		0482D9E422CCAE49008948E6 /* ZHCollectionFootVeiw.m in Sources */ = {isa = PBXBuildFile; fileRef = 0482D9E322CCAE49008948E6 /* ZHCollectionFootVeiw.m */; };
 		300933F11F90459D001FC16D /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 309F07401F8F6E1900796DDB /* NSData+ImageContentType.m */; };
 		300933F21F90459D001FC16D /* SDImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 309F07421F8F6E1900796DDB /* SDImageCache.m */; };
 		300933F31F90459D001FC16D /* SDWebImageCompat.m in Sources */ = {isa = PBXBuildFile; fileRef = 309F07441F8F6E1900796DDB /* SDWebImageCompat.m */; };
@@ -76,6 +79,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0482D9DC22CC9FDF008948E6 /* ZHMenuViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZHMenuViewController.h; sourceTree = "<group>"; };
+		0482D9DD22CC9FDF008948E6 /* ZHMenuViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZHMenuViewController.m; sourceTree = "<group>"; };
+		0482D9DF22CCAE32008948E6 /* ZHCollectionHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZHCollectionHeaderView.h; sourceTree = "<group>"; };
+		0482D9E022CCAE32008948E6 /* ZHCollectionHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZHCollectionHeaderView.m; sourceTree = "<group>"; };
+		0482D9E222CCAE49008948E6 /* ZHCollectionFootVeiw.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZHCollectionFootVeiw.h; sourceTree = "<group>"; };
+		0482D9E322CCAE49008948E6 /* ZHCollectionFootVeiw.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZHCollectionFootVeiw.m; sourceTree = "<group>"; };
 		301DA3721F8DFC7B00B09F11 /* ZHCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZHCollectionViewCell.h; sourceTree = "<group>"; };
 		301DA3731F8DFC7B00B09F11 /* ZHCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZHCollectionViewCell.m; sourceTree = "<group>"; };
 		301DA3741F8DFC7B00B09F11 /* ZHCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ZHCollectionViewCell.xib; sourceTree = "<group>"; };
@@ -219,6 +228,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0482D9DB22CC9F65008948E6 /* 模仿支付宝 */ = {
+			isa = PBXGroup;
+			children = (
+				0482D9DC22CC9FDF008948E6 /* ZHMenuViewController.h */,
+				0482D9DD22CC9FDF008948E6 /* ZHMenuViewController.m */,
+				0482D9DF22CCAE32008948E6 /* ZHCollectionHeaderView.h */,
+				0482D9E022CCAE32008948E6 /* ZHCollectionHeaderView.m */,
+				0482D9E222CCAE49008948E6 /* ZHCollectionFootVeiw.h */,
+				0482D9E322CCAE49008948E6 /* ZHCollectionFootVeiw.m */,
+			);
+			path = "模仿支付宝";
+			sourceTree = "<group>";
+		};
 		30236E2C1F8C62DA00DF2B6D /* 启动页制作1 */ = {
 			isa = PBXGroup;
 			children = (
@@ -281,6 +303,7 @@
 		30616C3B1F8B50B00018EF6F /* 自定义布局的学习 */ = {
 			isa = PBXGroup;
 			children = (
+				0482D9DB22CC9F65008948E6 /* 模仿支付宝 */,
 				309F06671F8EF6CD00796DDB /* 瀑布流4 */,
 				305444771F8CB7C3001FB8CE /* 相册浏览器(自定义布局1)3 */,
 				30236E321F8C639600DF2B6D /* 普通九宫格使用2 */,
@@ -581,6 +604,7 @@
 				309F06E21F8F143900796DDB /* MJMember.m in Sources */,
 				309F06E31F8F143900796DDB /* MJMethod.m in Sources */,
 				309F06E41F8F143900796DDB /* MJType.m in Sources */,
+				0482D9DE22CC9FDF008948E6 /* ZHMenuViewController.m in Sources */,
 				309F06E51F8F143900796DDB /* MJTypeEncoding.m in Sources */,
 				309F06E61F8F143900796DDB /* NSObject+MJCoding.m in Sources */,
 				309F06E71F8F143900796DDB /* NSObject+MJKeyValue.m in Sources */,
@@ -611,6 +635,8 @@
 				309F07101F8F1A6500796DDB /* ZHShopViewCell.m in Sources */,
 				30236E311F8C633C00DF2B6D /* CollectionViewController.m in Sources */,
 				30616C411F8B50B00018EF6F /* ViewController.m in Sources */,
+				0482D9E422CCAE49008948E6 /* ZHCollectionFootVeiw.m in Sources */,
+				0482D9E122CCAE32008948E6 /* ZHCollectionHeaderView.m in Sources */,
 				309F066A1F8EF95300796DDB /* ViewController3.m in Sources */,
 				30616C4C1F8B50B00018EF6F /* main.m in Sources */,
 				30236E381F8C755500DF2B6D /* CollectionHeadView.m in Sources */,

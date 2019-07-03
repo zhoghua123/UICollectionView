@@ -53,20 +53,20 @@ static NSString *cellID = @"itemcell";
 }
 //布局间的切换
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-//    CollectionViewController2 *collectVC = [[CollectionViewController2 alloc] init];
-//    [self presentViewController:collectVC animated:YES completion:nil];
+    CollectionViewController2 *collectVC = [[CollectionViewController2 alloc] init];
+    [self presentViewController:collectVC animated:YES completion:nil];
     //看完自定义布局3之后在看下面这个!!切换布局
-    if ([self.collectionView.collectionViewLayout isKindOfClass:[ZHLineLayout class]]) {
-        [self.collectionView setCollectionViewLayout:[[ZHCircleLayout alloc] init] animated:YES];
-    }else if([self.collectionView.collectionViewLayout isKindOfClass:[ZHCircleLayout class]]) {
-         [self.collectionView setCollectionViewLayout:[[ZHDefineLayout alloc] init] animated:YES];
-    }
-    else if([self.collectionView.collectionViewLayout isKindOfClass:[ZHDefineLayout class]]) {
-        ZHLineLayout *layout = [[ZHLineLayout alloc] init];
-        layout.itemSize = CGSizeMake(150, 150);
-        layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-        [self.collectionView setCollectionViewLayout:layout animated:YES];
-    }
+//    if ([self.collectionView.collectionViewLayout isKindOfClass:[ZHLineLayout class]]) {
+//        [self.collectionView setCollectionViewLayout:[[ZHCircleLayout alloc] init] animated:YES];
+//    }else if([self.collectionView.collectionViewLayout isKindOfClass:[ZHCircleLayout class]]) {
+//         [self.collectionView setCollectionViewLayout:[[ZHDefineLayout alloc] init] animated:YES];
+//    }
+//    else if([self.collectionView.collectionViewLayout isKindOfClass:[ZHDefineLayout class]]) {
+//        ZHLineLayout *layout = [[ZHLineLayout alloc] init];
+//        layout.itemSize = CGSizeMake(150, 150);
+//        layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+//        [self.collectionView setCollectionViewLayout:layout animated:YES];
+//    }
 }
 
 #pragma mark - UICollectionViewDataSource

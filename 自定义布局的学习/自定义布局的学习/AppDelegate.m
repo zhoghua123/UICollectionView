@@ -7,7 +7,7 @@
 //
 #import "CollectionViewController.h"
 #import "AppDelegate.h"
-
+#import "ZHMenuViewController.h"
 @interface AppDelegate ()
 
 @end
@@ -17,7 +17,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     UIWindow *window = [[UIWindow alloc] init];
     window.frame = [UIScreen mainScreen].bounds;
-    window.rootViewController =[[CollectionViewController alloc] init];
+//    window.rootViewController =[[CollectionViewController alloc] init];
+    window.rootViewController = [[ZHMenuViewController alloc] init];
     self.window = window;
     [window makeKeyAndVisible];
     return YES;
