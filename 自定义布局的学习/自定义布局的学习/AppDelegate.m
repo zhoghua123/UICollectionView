@@ -18,7 +18,8 @@
     UIWindow *window = [[UIWindow alloc] init];
     window.frame = [UIScreen mainScreen].bounds;
 //    window.rootViewController =[[CollectionViewController alloc] init];
-    window.rootViewController = [[ZHMenuViewController alloc] init];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:[[ZHMenuViewController alloc] init]];
+    window.rootViewController = nav;
     self.window = window;
     [window makeKeyAndVisible];
     return YES;

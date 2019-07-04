@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0406E31822CDA67F007C9229 /* ZHCollectionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0406E31722CDA67F007C9229 /* ZHCollectionHeaderView.xib */; };
+		0406E31B22CDAB95007C9229 /* ZHCollectionSectionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0406E31A22CDAB95007C9229 /* ZHCollectionSectionModel.m */; };
 		0482D9DE22CC9FDF008948E6 /* ZHMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0482D9DD22CC9FDF008948E6 /* ZHMenuViewController.m */; };
 		0482D9E122CCAE32008948E6 /* ZHCollectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0482D9E022CCAE32008948E6 /* ZHCollectionHeaderView.m */; };
 		0482D9E422CCAE49008948E6 /* ZHCollectionFootVeiw.m in Sources */ = {isa = PBXBuildFile; fileRef = 0482D9E322CCAE49008948E6 /* ZHCollectionFootVeiw.m */; };
@@ -79,6 +81,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0406E31722CDA67F007C9229 /* ZHCollectionHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ZHCollectionHeaderView.xib; sourceTree = "<group>"; };
+		0406E31922CDAB95007C9229 /* ZHCollectionSectionModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZHCollectionSectionModel.h; sourceTree = "<group>"; };
+		0406E31A22CDAB95007C9229 /* ZHCollectionSectionModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZHCollectionSectionModel.m; sourceTree = "<group>"; };
 		0482D9DC22CC9FDF008948E6 /* ZHMenuViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZHMenuViewController.h; sourceTree = "<group>"; };
 		0482D9DD22CC9FDF008948E6 /* ZHMenuViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZHMenuViewController.m; sourceTree = "<group>"; };
 		0482D9DF22CCAE32008948E6 /* ZHCollectionHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZHCollectionHeaderView.h; sourceTree = "<group>"; };
@@ -228,15 +233,42 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0482D9DB22CC9F65008948E6 /* 模仿支付宝 */ = {
+		0406E31C22CDDB5D007C9229 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0406E31922CDAB95007C9229 /* ZHCollectionSectionModel.h */,
+				0406E31A22CDAB95007C9229 /* ZHCollectionSectionModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		0406E31D22CDDB68007C9229 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				0482D9DF22CCAE32008948E6 /* ZHCollectionHeaderView.h */,
+				0482D9E022CCAE32008948E6 /* ZHCollectionHeaderView.m */,
+				0406E31722CDA67F007C9229 /* ZHCollectionHeaderView.xib */,
+				0482D9E222CCAE49008948E6 /* ZHCollectionFootVeiw.h */,
+				0482D9E322CCAE49008948E6 /* ZHCollectionFootVeiw.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		0406E31E22CDDB76007C9229 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
 				0482D9DC22CC9FDF008948E6 /* ZHMenuViewController.h */,
 				0482D9DD22CC9FDF008948E6 /* ZHMenuViewController.m */,
-				0482D9DF22CCAE32008948E6 /* ZHCollectionHeaderView.h */,
-				0482D9E022CCAE32008948E6 /* ZHCollectionHeaderView.m */,
-				0482D9E222CCAE49008948E6 /* ZHCollectionFootVeiw.h */,
-				0482D9E322CCAE49008948E6 /* ZHCollectionFootVeiw.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		0482D9DB22CC9F65008948E6 /* 模仿支付宝 */ = {
+			isa = PBXGroup;
+			children = (
+				0406E31E22CDDB76007C9229 /* Controller */,
+				0406E31D22CDDB68007C9229 /* View */,
+				0406E31C22CDDB5D007C9229 /* Model */,
 			);
 			path = "模仿支付宝";
 			sourceTree = "<group>";
@@ -569,6 +601,7 @@
 				30616C491F8B50B00018EF6F /* LaunchScreen.storyboard in Resources */,
 				301DA3761F8DFC7B00B09F11 /* ZHCollectionViewCell.xib in Resources */,
 				30616C461F8B50B00018EF6F /* Assets.xcassets in Resources */,
+				0406E31822CDA67F007C9229 /* ZHCollectionHeaderView.xib in Resources */,
 				30616C441F8B50B00018EF6F /* Main.storyboard in Resources */,
 				30236E3D1F8C765800DF2B6D /* CollectionFooterView.xib in Resources */,
 			);
@@ -601,6 +634,7 @@
 				309F06DF1F8F143900796DDB /* MJConst.m in Sources */,
 				309F06E01F8F143900796DDB /* MJFoundation.m in Sources */,
 				309F06E11F8F143900796DDB /* MJIvar.m in Sources */,
+				0406E31B22CDAB95007C9229 /* ZHCollectionSectionModel.m in Sources */,
 				309F06E21F8F143900796DDB /* MJMember.m in Sources */,
 				309F06E31F8F143900796DDB /* MJMethod.m in Sources */,
 				309F06E41F8F143900796DDB /* MJType.m in Sources */,
