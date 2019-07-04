@@ -39,4 +39,6 @@
     _leftTitle.text = model.title;
     _subtitle.text = model.isSubtitle ? model.subTitle : @"";
 }
+
+
 @end

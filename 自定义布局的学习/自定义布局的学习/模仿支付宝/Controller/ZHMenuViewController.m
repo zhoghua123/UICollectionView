@@ -7,9 +7,9 @@
 //
 
 #import "ZHMenuViewController.h"
-#import "ZHCollectionFootVeiw.h"
 #import "ZHCollectionHeaderView.h"
 #import "ZHCollectionSectionModel.h"
+#import "ZHConnectionModel.h"
 //#define citemWH 50   //通用item宽高
 #define columMargn  15  //限定每列的间距
 #define ccolumns 4   //通用每行4个
@@ -23,7 +23,9 @@
 @interface ZHMenuViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 @property (nonatomic,weak) UICollectionView *collectionView;
 @property (nonatomic,strong) NSMutableArray *sectionArray;
-@property (nonatomic, assign) BOOL isLineFirst;
+@property (nonatomic, assign) BOOL isEditing;
+@property (nonatomic,strong) NSMutableArray *firstSectionArray;
+@property (nonatomic,strong) NSMutableArray *secondSectionArray;
 @end
 static NSString * const reuseIdentifier = @"Cell";
 static NSString * const reuseIdentifierHeader = @"header";
@@ -34,6 +36,26 @@ static NSString * const reuseIdentifierFooter = @"footer";
         _sectionArray = [ZHCollectionSectionModel getSectionDataArray];
     }
     return _sectionArray ;
+}
+- (NSMutableArray *)firstSectionArray{
+    if (!_firstSectionArray) {
+        _firstSectionArray = [NSMutableArray array];
+        for (int i = 0; i< 7; i++) {
+            [_firstSectionArray addObject:self.secondSectionArray[i]];
+        }
+    }
+    return _firstSectionArray ;
+}
+- (NSMutableArray *)secondSectionArray{
+    if (!_secondSectionArray) {
+        _secondSectionArray = [NSMutableArray array];
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"dataSource" ofType:@"plist"];
+        NSArray *array = [NSArray arrayWithContentsOfFile:filePath];
+        for (NSDictionary *dic in array) {
+            [_secondSectionArray addObject:[[ZHConnectionModel alloc] initWithDict:dic]];
+        }
+    }
+    return _secondSectionArray ;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -55,7 +77,6 @@ static NSString * const reuseIdentifierFooter = @"footer";
     [self.collectionView registerNib:[UINib nibWithNibName:NSStringFromClass(ZHCollectionHeaderView.class) bundle:nil] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:reuseIdentifierHeader];
     //注册footer
     [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:reuseIdentifierFooter];
-    self.isLineFirst = YES;
     
     self.navigationItem.title = @"全部功能";
     self.navigationItem.rightBarButtonItem = [self createBarButtonItemWithTag:111];
@@ -102,7 +123,7 @@ static NSString * const reuseIdentifierFooter = @"footer";
 -(void)changeLayout{
     self.navigationItem.leftBarButtonItem.customView.hidden = NO;
     self.navigationItem.rightBarButtonItem.customView.hidden = NO;
-    self.isLineFirst = NO;
+    self.isEditing = YES;
     ZHCollectionSectionModel *model = self.sectionArray.firstObject;
     model.isSubtitle = YES;
     model.isRightBtn = NO;
@@ -130,7 +151,7 @@ static NSString * const reuseIdentifierFooter = @"footer";
 }
 
 -(void)itemBtnAction:(UIButton *)btn{
-    self.isLineFirst = YES;
+    self.isEditing = NO;
     self.navigationItem.leftBarButtonItem.customView.hidden = YES;
     self.navigationItem.rightBarButtonItem.customView.hidden = YES;
     ZHCollectionSectionModel *model = self.sectionArray.firstObject;
@@ -149,9 +170,9 @@ static NSString * const reuseIdentifierFooter = @"footer";
 //每个section多少items
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     if (section == 0) {
-        return 7;
+        return self.firstSectionArray.count;
     }else{
-        return 10;
+        return self.secondSectionArray.count;
     }
 }
 
@@ -159,6 +180,14 @@ static NSString * const reuseIdentifierFooter = @"footer";
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     cell.contentView.backgroundColor = UIColor.redColor;
+    if (indexPath.section == 0 && !self.editing ) {
+        cell.contentView.layer.cornerRadius = [self getFirstSize].width *0.5;
+        cell.contentView.layer.masksToBounds = YES;
+    }else{
+        cell.contentView.layer.cornerRadius = 0;
+        cell.contentView.layer.masksToBounds = NO;
+    }
+
     return cell;
 }
 
@@ -193,7 +222,7 @@ static NSString * const reuseIdentifierFooter = @"footer";
 //详细设置每个item的size
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0) {
-        if (self.isLineFirst) {
+        if (!self.editing) {
             return [self getFirstSize];
 //            return CGSizeMake(fitemWH, fitemWH);
         }else{
@@ -208,7 +237,7 @@ static NSString * const reuseIdentifierFooter = @"footer";
 //详细设置每个section的内边距
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
     if (section == 0) {
-        if (self.isLineFirst) {
+        if (!self.editing) {
             return UIEdgeInsetsMake(sectionInset,columMargn, sectionInset,columMargn);
 //            return UIEdgeInsetsMake(sectionInset,[self getFirstColumn], sectionInset,[self getFirstColumn]);
         }else{
@@ -228,7 +257,7 @@ static NSString * const reuseIdentifierFooter = @"footer";
 //详细设置每个section中cell的列距
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section{
     if (section == 0) {
-        if (self.isLineFirst) {
+        if (!self.editing) {
             return columMargn;
 //            return [self getFirstColumn];
         }else{
@@ -254,45 +283,9 @@ static NSString * const reuseIdentifierFooter = @"footer";
 }
 #pragma mark - UICollectionViewDeletegate
 
-// 允许选中时，高亮
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%s", __FUNCTION__);
-    return YES;
-}
-
-// 高亮完成后回调
-- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%s", __FUNCTION__);
-    //设置高亮背景色
-    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
-    cell.backgroundColor = [UIColor purpleColor];
-}
-
-// 由高亮转成非高亮完成时的回调
-- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%s", __FUNCTION__);
-    //高亮消失时还原背景色
-    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
-    cell.backgroundColor = [UIColor redColor];
-}
-
-// 设置是否允许选中
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%s", __FUNCTION__);
-    return YES;
-}
-
-// 设置是否允许取消选中
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%s", __FUNCTION__);
-    return YES;
-}
 //选中操作
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"%s", __FUNCTION__);
-}
-// 取消选中操作
-- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.isEditing) return;
     NSLog(@"%s", __FUNCTION__);
 }
 
