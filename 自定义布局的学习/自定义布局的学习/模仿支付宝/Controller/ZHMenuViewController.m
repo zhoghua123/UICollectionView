@@ -21,6 +21,8 @@
 
 #define sectionHeaderWH 60 //header高度
 #define sectionFooterWH 15  //footer高度
+
+#define firstSectionDefine 7 //第一section默认个数
 @interface ZHMenuViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 @property (nonatomic,weak) UICollectionView *collectionView;
 @property (nonatomic,strong) NSMutableArray *sectionArray;
@@ -41,7 +43,7 @@ static NSString * const reuseIdentifierFooter = @"footer";
 - (NSMutableArray *)firstSectionArray{
     if (!_firstSectionArray) {
         _firstSectionArray = [NSMutableArray array];
-        for (int i = 0; i< 7; i++) {
+        for (int i = 0; i< firstSectionDefine; i++) {
             //注意：一定要重新创建对象
             ZHConnectionModel *model = self.secondSectionArray[i];
             ZHConnectionModel *teModel = [model datacopy];
@@ -231,6 +233,18 @@ static NSString * const reuseIdentifierFooter = @"footer";
     }
     return  nil;
 }
+
+-(void)changeVirtualItemForFirstSecondArray{
+    ZHConnectionModel *lmodel = self.firstSectionArray.lastObject;
+    if (self.firstSectionArray.count > firstSectionDefine) {
+        [self.firstSectionArray removeLastObject];
+    }else{
+        if (lmodel.isVirtual) return;
+        ZHConnectionModel *model = [[ZHConnectionModel alloc] init];
+        model.isVirtual = YES;
+        [self.firstSectionArray addObject:model];
+    }
+}
 #pragma mark - UICollectionViewDataSource
 
 //多少section
@@ -249,7 +263,6 @@ static NSString * const reuseIdentifierFooter = @"footer";
 //每个item样式
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     ZHMenuViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    cell.contentView.backgroundColor = UIColor.lightGrayColor;
     if (indexPath.section == 0) {
         cell.model = self.firstSectionArray[indexPath.row];
     }else{
@@ -270,8 +283,16 @@ static NSString * const reuseIdentifierFooter = @"footer";
                 [collectionView deleteItemsAtIndexPaths:@[indexPath]];
             } completion:^(BOOL finished) {
                 [collectionView reloadData];
+                ZHConnectionModel *fmodelx = self.firstSectionArray.lastObject;
+                if (!fmodelx.isVirtual) {
+                    [collectionView performBatchUpdates:^{
+                        [weakSelf changeVirtualItemForFirstSecondArray];
+                        [collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.firstSectionArray.count-1 inSection:0]]];
+                    } completion:^(BOOL finished) {
+                        [collectionView reloadData];
+                    }];
+                }
             }];
-            
         }else{
             //0section的model
             ZHConnectionModel *smodel = weakSelf.secondSectionArray[indexPath.row];
@@ -279,18 +300,27 @@ static NSString * const reuseIdentifierFooter = @"footer";
             ZHConnectionModel *fmodel = [weakSelf findModelFromfirstSectionArrayWithStr:smodel.title];
            
             if (smodel.isAdd) {
-                if (weakSelf.firstSectionArray.count>=7) return;
+                ZHConnectionModel *fmodelx = self.firstSectionArray.lastObject;
+                if (weakSelf.firstSectionArray.count>=firstSectionDefine && !fmodelx.isVirtual) return;
                 NSLog(@"======点击了加====");
                 smodel.isAdd = NO;
                 ZHConnectionModel *tfmodel = [smodel datacopy];
                 tfmodel.isAdd = NO;
-                NSInteger index = weakSelf.firstSectionArray.count;
+                NSInteger index = weakSelf.firstSectionArray.count-1;
                 NSIndexPath *dex = [NSIndexPath indexPathForRow:index inSection:0];
                 [collectionView performBatchUpdates:^{
-                    [weakSelf.firstSectionArray addObject:tfmodel];
+                    [weakSelf.firstSectionArray insertObject:tfmodel atIndex:self.firstSectionArray.count-1];
                     [collectionView insertItemsAtIndexPaths:@[dex]];
                 } completion:^(BOOL finished) {
                     [collectionView reloadData];
+                    if (weakSelf.firstSectionArray.count == 8) {
+                        [collectionView performBatchUpdates:^{
+                            [weakSelf changeVirtualItemForFirstSecondArray];
+                            [collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:weakSelf.firstSectionArray.count inSection:0]]];
+                        } completion:^(BOOL finished) {
+                            [collectionView reloadData];
+                        }];
+                    }
                 }];
             }else{
                 NSLog(@"======点击了减====");
@@ -303,6 +333,15 @@ static NSString * const reuseIdentifierFooter = @"footer";
                     [collectionView deleteItemsAtIndexPaths:@[dex]];
                 } completion:^(BOOL finished) {
                     [collectionView reloadData];
+                    ZHConnectionModel *fmodelx = self.firstSectionArray.lastObject;
+                    if (!fmodelx.isVirtual) {
+                        [collectionView performBatchUpdates:^{
+                            [weakSelf changeVirtualItemForFirstSecondArray];
+                            [collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.firstSectionArray.count-1 inSection:0]]];
+                        } completion:^(BOOL finished) {
+                            [collectionView reloadData];
+                        }];
+                    }
                 }];
             }
         }

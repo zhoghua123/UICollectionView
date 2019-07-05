@@ -16,6 +16,7 @@
         _isAdd = NO;
         _isTitle = YES;
         _isRightBtn  = NO;
+        _isVirtual = NO;
     }
     return self;
 }
@@ -27,6 +28,7 @@
     model.isTitle = self.isTitle;
     model.isRightBtn = self.isRightBtn;
     model.isAdd = self.isAdd;
+    model.isVirtual = self.isVirtual;
     return model;
 }
 @end

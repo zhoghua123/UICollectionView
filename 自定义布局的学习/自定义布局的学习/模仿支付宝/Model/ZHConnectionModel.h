@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL isRightBtn; //是否显示右上角btn
 @property (nonatomic, assign) BOOL isTitle; //是否需要显示标题
 @property (nonatomic, assign) BOOL isAdd;  //是否是加
+@property (nonatomic, assign) BOOL isVirtual; //是否是虚拟cell
 
 -(instancetype)initWithDict:(NSDictionary *)dic;
 
