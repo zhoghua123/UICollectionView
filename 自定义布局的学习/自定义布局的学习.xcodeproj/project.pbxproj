@@ -11,6 +11,8 @@
 		0406E31B22CDAB95007C9229 /* ZHCollectionSectionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0406E31A22CDAB95007C9229 /* ZHCollectionSectionModel.m */; };
 		0406E32222CDFB34007C9229 /* dataSource.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0406E32122CDFB34007C9229 /* dataSource.plist */; };
 		0406E32522CDFF1E007C9229 /* ZHConnectionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0406E32422CDFF1E007C9229 /* ZHConnectionModel.m */; };
+		041F7CD922CEE90C00B24395 /* ZHMenuViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 041F7CD722CEE90C00B24395 /* ZHMenuViewCell.m */; };
+		041F7CDA22CEE90C00B24395 /* ZHMenuViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 041F7CD822CEE90C00B24395 /* ZHMenuViewCell.xib */; };
 		0482D9DE22CC9FDF008948E6 /* ZHMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0482D9DD22CC9FDF008948E6 /* ZHMenuViewController.m */; };
 		0482D9E122CCAE32008948E6 /* ZHCollectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0482D9E022CCAE32008948E6 /* ZHCollectionHeaderView.m */; };
 		300933F11F90459D001FC16D /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 309F07401F8F6E1900796DDB /* NSData+ImageContentType.m */; };
@@ -88,6 +90,9 @@
 		0406E32122CDFB34007C9229 /* dataSource.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = dataSource.plist; sourceTree = "<group>"; };
 		0406E32322CDFF1E007C9229 /* ZHConnectionModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZHConnectionModel.h; sourceTree = "<group>"; };
 		0406E32422CDFF1E007C9229 /* ZHConnectionModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZHConnectionModel.m; sourceTree = "<group>"; };
+		041F7CD622CEE90C00B24395 /* ZHMenuViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZHMenuViewCell.h; sourceTree = "<group>"; };
+		041F7CD722CEE90C00B24395 /* ZHMenuViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZHMenuViewCell.m; sourceTree = "<group>"; };
+		041F7CD822CEE90C00B24395 /* ZHMenuViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ZHMenuViewCell.xib; sourceTree = "<group>"; };
 		0482D9DC22CC9FDF008948E6 /* ZHMenuViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZHMenuViewController.h; sourceTree = "<group>"; };
 		0482D9DD22CC9FDF008948E6 /* ZHMenuViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZHMenuViewController.m; sourceTree = "<group>"; };
 		0482D9DF22CCAE32008948E6 /* ZHCollectionHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZHCollectionHeaderView.h; sourceTree = "<group>"; };
@@ -252,6 +257,9 @@
 				0482D9DF22CCAE32008948E6 /* ZHCollectionHeaderView.h */,
 				0482D9E022CCAE32008948E6 /* ZHCollectionHeaderView.m */,
 				0406E31722CDA67F007C9229 /* ZHCollectionHeaderView.xib */,
+				041F7CD622CEE90C00B24395 /* ZHMenuViewCell.h */,
+				041F7CD722CEE90C00B24395 /* ZHMenuViewCell.m */,
+				041F7CD822CEE90C00B24395 /* ZHMenuViewCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -606,6 +614,7 @@
 				301DA3761F8DFC7B00B09F11 /* ZHCollectionViewCell.xib in Resources */,
 				30616C461F8B50B00018EF6F /* Assets.xcassets in Resources */,
 				0406E31822CDA67F007C9229 /* ZHCollectionHeaderView.xib in Resources */,
+				041F7CDA22CEE90C00B24395 /* ZHMenuViewCell.xib in Resources */,
 				30616C441F8B50B00018EF6F /* Main.storyboard in Resources */,
 				30236E3D1F8C765800DF2B6D /* CollectionFooterView.xib in Resources */,
 			);
@@ -679,6 +688,7 @@
 				30616C4C1F8B50B00018EF6F /* main.m in Sources */,
 				30236E381F8C755500DF2B6D /* CollectionHeadView.m in Sources */,
 				30236E401F8C7BB000DF2B6D /* CollectionViewCell.m in Sources */,
+				041F7CD922CEE90C00B24395 /* ZHMenuViewCell.m in Sources */,
 				30616C3E1F8B50B00018EF6F /* AppDelegate.m in Sources */,
 				3054447A1F8CBA80001FB8CE /* ZHLineLayout.m in Sources */,
 			);

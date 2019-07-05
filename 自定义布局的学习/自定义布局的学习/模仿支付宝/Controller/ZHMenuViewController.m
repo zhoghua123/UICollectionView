@@ -10,6 +10,7 @@
 #import "ZHCollectionHeaderView.h"
 #import "ZHCollectionSectionModel.h"
 #import "ZHConnectionModel.h"
+#import "ZHMenuViewCell.h"
 //#define citemWH 50   //通用item宽高
 #define columMargn  15  //限定每列的间距
 #define ccolumns 4   //通用每行4个
@@ -41,7 +42,13 @@ static NSString * const reuseIdentifierFooter = @"footer";
     if (!_firstSectionArray) {
         _firstSectionArray = [NSMutableArray array];
         for (int i = 0; i< 7; i++) {
-            [_firstSectionArray addObject:self.secondSectionArray[i]];
+            //注意：一定要重新创建对象
+            ZHConnectionModel *model = self.secondSectionArray[i];
+            ZHConnectionModel *teModel = [model datacopy];
+            teModel.isTitle = NO;
+            teModel.isRightBtn = NO;
+            teModel.isAdd = NO;
+            [_firstSectionArray addObject:teModel];
         }
     }
     return _firstSectionArray ;
@@ -60,8 +67,8 @@ static NSString * const reuseIdentifierFooter = @"footer";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = UIColor.whiteColor;
-    //1. 初始化整体布局
-    //2. 初始化UICollectionView
+
+    //1. 初始化UICollectionView
     UICollectionView *collection = [[UICollectionView alloc] initWithFrame:UIScreen.mainScreen.bounds collectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
     collection.dataSource = self;
     collection.delegate = self;
@@ -69,20 +76,24 @@ static NSString * const reuseIdentifierFooter = @"footer";
     self.collectionView = collection;
     self.collectionView.backgroundColor = UIColor.whiteColor;
     
-    //3. 注册cell、header、footer
+    //2. 注册cell、header、footer
     //注册cell
-    [collection registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
+//    [collection registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
+    [collection registerNib:[UINib nibWithNibName:NSStringFromClass(ZHMenuViewCell.class) bundle:nil] forCellWithReuseIdentifier:reuseIdentifier];
     //ZHCollectionHeaderView、ZHCollectionFootVeiw继承自UICollectionReusableView
     //注册header
     [self.collectionView registerNib:[UINib nibWithNibName:NSStringFromClass(ZHCollectionHeaderView.class) bundle:nil] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:reuseIdentifierHeader];
     //注册footer
     [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:reuseIdentifierFooter];
     
+    //3. 初始化导航栏
     self.navigationItem.title = @"全部功能";
     self.navigationItem.rightBarButtonItem = [self createBarButtonItemWithTag:111];
     self.navigationItem.leftBarButtonItem = [self createBarButtonItemWithTag:-111];
     self.navigationItem.leftBarButtonItem.customView.hidden = YES;
     self.navigationItem.rightBarButtonItem.customView.hidden = YES;
+    
+   
 }
 
 
@@ -128,6 +139,7 @@ static NSString * const reuseIdentifierFooter = @"footer";
     model.isSubtitle = YES;
     model.isRightBtn = NO;
     self.navigationItem.title = @"编辑首页功能";
+    [self dataSourceDealWith];
     [self.collectionView reloadData];
 }
 
@@ -158,9 +170,67 @@ static NSString * const reuseIdentifierFooter = @"footer";
     model.isSubtitle = NO;
     model.isRightBtn = YES;
     self.navigationItem.title = @"全部功能";
+    [self dataSourceDealWith];
     [self.collectionView reloadData];
 }
 
+-(void)dataSourceDealWith{
+    if (self.isEditing) {
+        //0section
+        for (ZHConnectionModel *model in self.firstSectionArray) {
+            model.isRightBtn = YES;
+            model.isTitle = YES;
+            model.isAdd = ![self checkHaveObjectWithModel:model];
+        }
+        //1section
+        for (ZHConnectionModel *model in self.secondSectionArray) {
+            model.isRightBtn = YES;
+            model.isTitle = YES;
+            model.isAdd = ![self checkHaveObjectWithModel2:model];
+        }
+        
+    }else{
+        //0section
+        for (ZHConnectionModel *model in self.firstSectionArray) {
+            model.isRightBtn = NO;
+            model.isTitle = NO;
+            model.isAdd = NO;
+        }
+        //1section
+        for (ZHConnectionModel *model in self.secondSectionArray) {
+            model.isAdd = NO;
+            model.isRightBtn = NO;
+            model.isTitle = YES;
+        }
+    }
+}
+
+-(BOOL)checkHaveObjectWithModel:(ZHConnectionModel *)model{
+    for (ZHConnectionModel *temmodel in self.secondSectionArray) {
+        if ([model.title isEqualToString:temmodel.title]) return YES;
+    }
+    return NO;
+}
+-(BOOL)checkHaveObjectWithModel2:(ZHConnectionModel *)model{
+    for (ZHConnectionModel *temmodel in self.firstSectionArray) {
+        if ([model.title isEqualToString:temmodel.title]) return YES;
+    }
+    return NO;
+}
+//从数组1中找出相应model
+-(ZHConnectionModel *)findModelFromfirstSectionArrayWithStr:(NSString *)str{
+    for (ZHConnectionModel *model  in self.firstSectionArray) {
+        if ([str isEqualToString:model.title]) return model;
+    }
+    return  nil;
+}
+//从数组2中找出相应model
+-(ZHConnectionModel *)findModelFromsecondSectionArrayWithStr:(NSString *)str{
+    for (ZHConnectionModel *model  in self.secondSectionArray) {
+        if ([str isEqualToString:model.title]) return model;
+    }
+    return  nil;
+}
 #pragma mark - UICollectionViewDataSource
 
 //多少section
@@ -178,16 +248,65 @@ static NSString * const reuseIdentifierFooter = @"footer";
 
 //每个item样式
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    cell.contentView.backgroundColor = UIColor.redColor;
-    if (indexPath.section == 0 && !self.editing ) {
-        cell.contentView.layer.cornerRadius = [self getFirstSize].width *0.5;
-        cell.contentView.layer.masksToBounds = YES;
+    ZHMenuViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    cell.contentView.backgroundColor = UIColor.lightGrayColor;
+    if (indexPath.section == 0) {
+        cell.model = self.firstSectionArray[indexPath.row];
     }else{
-        cell.contentView.layer.cornerRadius = 0;
-        cell.contentView.layer.masksToBounds = NO;
+        cell.model = self.secondSectionArray[indexPath.row];
     }
-
+    __weak __typeof(&*self) weakSelf = self;
+    cell.addDele = ^(BOOL isAdd) {
+        if (!weakSelf.isEditing) return;
+        if (indexPath.section == 0) {
+            NSLog(@"======点击了减====");
+            ZHConnectionModel *fmodel = weakSelf.firstSectionArray[indexPath.row];
+            ZHConnectionModel *smodel = [weakSelf findModelFromsecondSectionArrayWithStr:fmodel.title];
+            smodel.isAdd = YES;
+            
+            [collectionView performBatchUpdates:^{
+                [weakSelf.firstSectionArray removeObject:fmodel];
+                //注意: 这句必须放在最后!!!!!
+                [collectionView deleteItemsAtIndexPaths:@[indexPath]];
+            } completion:^(BOOL finished) {
+                [collectionView reloadData];
+            }];
+            
+        }else{
+            //0section的model
+            ZHConnectionModel *smodel = weakSelf.secondSectionArray[indexPath.row];
+            //0section的model
+            ZHConnectionModel *fmodel = [weakSelf findModelFromfirstSectionArrayWithStr:smodel.title];
+           
+            if (smodel.isAdd) {
+                if (weakSelf.firstSectionArray.count>=7) return;
+                NSLog(@"======点击了加====");
+                smodel.isAdd = NO;
+                ZHConnectionModel *tfmodel = [smodel datacopy];
+                tfmodel.isAdd = NO;
+                NSInteger index = weakSelf.firstSectionArray.count;
+                NSIndexPath *dex = [NSIndexPath indexPathForRow:index inSection:0];
+                [collectionView performBatchUpdates:^{
+                    [weakSelf.firstSectionArray addObject:tfmodel];
+                    [collectionView insertItemsAtIndexPaths:@[dex]];
+                } completion:^(BOOL finished) {
+                    [collectionView reloadData];
+                }];
+            }else{
+                NSLog(@"======点击了减====");
+                smodel.isAdd = YES;
+                NSInteger index = [weakSelf.firstSectionArray indexOfObject:fmodel];
+                NSIndexPath *dex = [NSIndexPath indexPathForRow:index inSection:0];
+                [collectionView performBatchUpdates:^{
+                    [weakSelf.firstSectionArray removeObject:fmodel];
+                    //注意: 这句必须放在最后!!!!!
+                    [collectionView deleteItemsAtIndexPaths:@[dex]];
+                } completion:^(BOOL finished) {
+                    [collectionView reloadData];
+                }];
+            }
+        }
+    };
     return cell;
 }
 

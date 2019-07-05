@@ -12,10 +12,21 @@
 -(instancetype)initWithDict:(NSDictionary *)dic{
     if (self = [super init]) {
         _title = dic[@"title"];
-        _pic = dic[@"icon_nav4_c"];
+        _pic = dic[@"pic"];
+        _isAdd = NO;
+        _isTitle = YES;
+        _isRightBtn  = NO;
     }
     return self;
 }
 
-
+-(ZHConnectionModel *)datacopy{
+    ZHConnectionModel *model = [[ZHConnectionModel alloc] init];
+    model.title = self.title;
+    model.pic = self.pic;
+    model.isTitle = self.isTitle;
+    model.isRightBtn = self.isRightBtn;
+    model.isAdd = self.isAdd;
+    return model;
+}
 @end
