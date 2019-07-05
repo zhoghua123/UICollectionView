@@ -80,7 +80,6 @@ static NSString * const reuseIdentifierFooter = @"footer";
     
     //2. 注册cell、header、footer
     //注册cell
-//    [collection registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
     [collection registerNib:[UINib nibWithNibName:NSStringFromClass(ZHMenuViewCell.class) bundle:nil] forCellWithReuseIdentifier:reuseIdentifier];
     //ZHCollectionHeaderView、ZHCollectionFootVeiw继承自UICollectionReusableView
     //注册header
@@ -94,8 +93,6 @@ static NSString * const reuseIdentifierFooter = @"footer";
     self.navigationItem.leftBarButtonItem = [self createBarButtonItemWithTag:-111];
     self.navigationItem.leftBarButtonItem.customView.hidden = YES;
     self.navigationItem.rightBarButtonItem.customView.hidden = YES;
-    
-   
 }
 
 
@@ -176,6 +173,9 @@ static NSString * const reuseIdentifierFooter = @"footer";
     [self.collectionView reloadData];
 }
 
+/**
+ 编辑、费编辑数据源处理
+ */
 -(void)dataSourceDealWith{
     if (self.isEditing) {
         //0section
@@ -207,26 +207,39 @@ static NSString * const reuseIdentifierFooter = @"footer";
     }
 }
 
+
+/**
+ 核查是否在secondSectionArray数组中
+ */
 -(BOOL)checkHaveObjectWithModel:(ZHConnectionModel *)model{
     for (ZHConnectionModel *temmodel in self.secondSectionArray) {
         if ([model.title isEqualToString:temmodel.title]) return YES;
     }
     return NO;
 }
+/**
+ 核查是否在firstSectionArray数组中
+ */
 -(BOOL)checkHaveObjectWithModel2:(ZHConnectionModel *)model{
     for (ZHConnectionModel *temmodel in self.firstSectionArray) {
         if ([model.title isEqualToString:temmodel.title]) return YES;
     }
     return NO;
 }
-//从数组1中找出相应model
+
+
+/**
+ 从数组1中找出相应model
+ */
 -(ZHConnectionModel *)findModelFromfirstSectionArrayWithStr:(NSString *)str{
     for (ZHConnectionModel *model  in self.firstSectionArray) {
         if ([str isEqualToString:model.title]) return model;
     }
     return  nil;
 }
-//从数组2中找出相应model
+/**
+ 从数组2中找出相应model
+ */
 -(ZHConnectionModel *)findModelFromsecondSectionArrayWithStr:(NSString *)str{
     for (ZHConnectionModel *model  in self.secondSectionArray) {
         if ([str isEqualToString:model.title]) return model;
@@ -234,6 +247,10 @@ static NSString * const reuseIdentifierFooter = @"footer";
     return  nil;
 }
 
+
+/**
+ 0section中那个虚拟item的数据增删
+ */
 -(void)changeVirtualItemForFirstSecondArray{
     ZHConnectionModel *lmodel = self.firstSectionArray.lastObject;
     if (self.firstSectionArray.count > firstSectionDefine) {
@@ -243,6 +260,106 @@ static NSString * const reuseIdentifierFooter = @"footer";
         ZHConnectionModel *model = [[ZHConnectionModel alloc] init];
         model.isVirtual = YES;
         [self.firstSectionArray addObject:model];
+    }
+}
+
+
+/**
+ cell逻辑，超级复杂
+ 点击+、- 2个section的数据变化
+
+ @param collectionView vie
+ @param indexPath vie
+ */
+-(void)cellChangeWithCollectionView:(UICollectionView *)collectionView andIndexPath:(NSIndexPath *)indexPath{
+    if (!self.isEditing) return;
+    /*********第一个section 只有- ，没有+ **********/
+    if (indexPath.section == 0) {
+        NSLog(@"======点击了减====");
+        
+        ZHConnectionModel *fmodel = self.firstSectionArray[indexPath.row];
+        ZHConnectionModel *smodel = [self findModelFromsecondSectionArrayWithStr:fmodel.title];
+        smodel.isAdd = YES;
+        
+        /*********动态删除item**********/
+        [collectionView performBatchUpdates:^{
+            [self.firstSectionArray removeObject:fmodel];
+            //注意: 这句必须放在最后!!!!!
+            [collectionView deleteItemsAtIndexPaths:@[indexPath]];
+        } completion:^(BOOL finished) {
+            [collectionView reloadData];
+            
+            /*********动态添加虚拟item**********/
+            ZHConnectionModel *fmodelx = self.firstSectionArray.lastObject;
+            if (!fmodelx.isVirtual) {
+                [collectionView performBatchUpdates:^{
+                    [self changeVirtualItemForFirstSecondArray];
+                    [collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.firstSectionArray.count-1 inSection:0]]];
+                } completion:^(BOOL finished) {
+                    [collectionView reloadData];
+                }];
+            }
+        }];
+    }else{
+        
+        /*********第二个section，有+有- **********/
+        //0section的model
+        ZHConnectionModel *smodel = self.secondSectionArray[indexPath.row];
+        //0section的model
+        ZHConnectionModel *fmodel = [self findModelFromfirstSectionArrayWithStr:smodel.title];
+        
+        if (smodel.isAdd) {
+            ZHConnectionModel *fmodelx = self.firstSectionArray.lastObject;
+            if (self.firstSectionArray.count>=firstSectionDefine && !fmodelx.isVirtual) return;
+            NSLog(@"======点击了加====");
+            smodel.isAdd = NO;
+            ZHConnectionModel *tfmodel = [smodel datacopy];
+            tfmodel.isAdd = NO;
+            NSInteger index = self.firstSectionArray.count-1;
+            NSIndexPath *dex = [NSIndexPath indexPathForRow:index inSection:0];
+            
+            /*********动态添加item**********/
+            [collectionView performBatchUpdates:^{
+                [self.firstSectionArray insertObject:tfmodel atIndex:self.firstSectionArray.count-1];
+                [collectionView insertItemsAtIndexPaths:@[dex]];
+            } completion:^(BOOL finished) {
+                [collectionView reloadData];
+                
+                /*********动态删除虚拟item**********/
+                if (self.firstSectionArray.count == 8) {
+                    [collectionView performBatchUpdates:^{
+                        [self changeVirtualItemForFirstSecondArray];
+                        [collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.firstSectionArray.count inSection:0]]];
+                    } completion:^(BOOL finished) {
+                        [collectionView reloadData];
+                    }];
+                }
+            }];
+        }else{
+            NSLog(@"======点击了减====");
+            smodel.isAdd = YES;
+            NSInteger index = [self.firstSectionArray indexOfObject:fmodel];
+            NSIndexPath *dex = [NSIndexPath indexPathForRow:index inSection:0];
+            /*********动态删除item**********/
+            [collectionView performBatchUpdates:^{
+                [self.firstSectionArray removeObject:fmodel];
+                //注意: 这句必须放在最后!!!!!
+                [collectionView deleteItemsAtIndexPaths:@[dex]];
+            } completion:^(BOOL finished) {
+                [collectionView reloadData];
+                
+                /*********动态添加虚拟item**********/
+                ZHConnectionModel *fmodelx = self.firstSectionArray.lastObject;
+                if (!fmodelx.isVirtual) {
+                    [collectionView performBatchUpdates:^{
+                        [self changeVirtualItemForFirstSecondArray];
+                        [collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.firstSectionArray.count-1 inSection:0]]];
+                    } completion:^(BOOL finished) {
+                        [collectionView reloadData];
+                    }];
+                }
+            }];
+        }
     }
 }
 #pragma mark - UICollectionViewDataSource
@@ -270,81 +387,8 @@ static NSString * const reuseIdentifierFooter = @"footer";
     }
     __weak __typeof(&*self) weakSelf = self;
     cell.addDele = ^(BOOL isAdd) {
-        if (!weakSelf.isEditing) return;
-        if (indexPath.section == 0) {
-            NSLog(@"======点击了减====");
-            ZHConnectionModel *fmodel = weakSelf.firstSectionArray[indexPath.row];
-            ZHConnectionModel *smodel = [weakSelf findModelFromsecondSectionArrayWithStr:fmodel.title];
-            smodel.isAdd = YES;
-            
-            [collectionView performBatchUpdates:^{
-                [weakSelf.firstSectionArray removeObject:fmodel];
-                //注意: 这句必须放在最后!!!!!
-                [collectionView deleteItemsAtIndexPaths:@[indexPath]];
-            } completion:^(BOOL finished) {
-                [collectionView reloadData];
-                ZHConnectionModel *fmodelx = self.firstSectionArray.lastObject;
-                if (!fmodelx.isVirtual) {
-                    [collectionView performBatchUpdates:^{
-                        [weakSelf changeVirtualItemForFirstSecondArray];
-                        [collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.firstSectionArray.count-1 inSection:0]]];
-                    } completion:^(BOOL finished) {
-                        [collectionView reloadData];
-                    }];
-                }
-            }];
-        }else{
-            //0section的model
-            ZHConnectionModel *smodel = weakSelf.secondSectionArray[indexPath.row];
-            //0section的model
-            ZHConnectionModel *fmodel = [weakSelf findModelFromfirstSectionArrayWithStr:smodel.title];
-           
-            if (smodel.isAdd) {
-                ZHConnectionModel *fmodelx = self.firstSectionArray.lastObject;
-                if (weakSelf.firstSectionArray.count>=firstSectionDefine && !fmodelx.isVirtual) return;
-                NSLog(@"======点击了加====");
-                smodel.isAdd = NO;
-                ZHConnectionModel *tfmodel = [smodel datacopy];
-                tfmodel.isAdd = NO;
-                NSInteger index = weakSelf.firstSectionArray.count-1;
-                NSIndexPath *dex = [NSIndexPath indexPathForRow:index inSection:0];
-                [collectionView performBatchUpdates:^{
-                    [weakSelf.firstSectionArray insertObject:tfmodel atIndex:self.firstSectionArray.count-1];
-                    [collectionView insertItemsAtIndexPaths:@[dex]];
-                } completion:^(BOOL finished) {
-                    [collectionView reloadData];
-                    if (weakSelf.firstSectionArray.count == 8) {
-                        [collectionView performBatchUpdates:^{
-                            [weakSelf changeVirtualItemForFirstSecondArray];
-                            [collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:weakSelf.firstSectionArray.count inSection:0]]];
-                        } completion:^(BOOL finished) {
-                            [collectionView reloadData];
-                        }];
-                    }
-                }];
-            }else{
-                NSLog(@"======点击了减====");
-                smodel.isAdd = YES;
-                NSInteger index = [weakSelf.firstSectionArray indexOfObject:fmodel];
-                NSIndexPath *dex = [NSIndexPath indexPathForRow:index inSection:0];
-                [collectionView performBatchUpdates:^{
-                    [weakSelf.firstSectionArray removeObject:fmodel];
-                    //注意: 这句必须放在最后!!!!!
-                    [collectionView deleteItemsAtIndexPaths:@[dex]];
-                } completion:^(BOOL finished) {
-                    [collectionView reloadData];
-                    ZHConnectionModel *fmodelx = self.firstSectionArray.lastObject;
-                    if (!fmodelx.isVirtual) {
-                        [collectionView performBatchUpdates:^{
-                            [weakSelf changeVirtualItemForFirstSecondArray];
-                            [collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.firstSectionArray.count-1 inSection:0]]];
-                        } completion:^(BOOL finished) {
-                            [collectionView reloadData];
-                        }];
-                    }
-                }];
-            }
-        }
+        //点击+、- 2个section的数据变化
+        [weakSelf cellChangeWithCollectionView:collectionView andIndexPath:indexPath];
     };
     return cell;
 }
