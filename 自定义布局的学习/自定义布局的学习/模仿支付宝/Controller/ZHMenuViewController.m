@@ -87,7 +87,11 @@ static NSString * const reuseIdentifierFooter = @"footer";
     //注册footer
     [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:reuseIdentifierFooter];
     
-    //3. 初始化导航栏
+    //3. 给collectionView添加长按手势
+    UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction:)];
+    [_collectionView addGestureRecognizer:longPressGesture];
+    
+    //4. 初始化导航栏
     self.navigationItem.title = @"全部功能";
     self.navigationItem.rightBarButtonItem = [self createBarButtonItemWithTag:111];
     self.navigationItem.leftBarButtonItem = [self createBarButtonItemWithTag:-111];
@@ -362,6 +366,45 @@ static NSString * const reuseIdentifierFooter = @"footer";
         }
     }
 }
+
+- (void)longPressAction:(UILongPressGestureRecognizer *)longPress {
+    //获取此次点击的坐标，根据坐标获取cell在collectionView中对应的indexPath
+    CGPoint point = [longPress locationInView:_collectionView];
+    NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:point];
+    //根据长按手势的状态进行处理。
+    switch (longPress.state) {
+        case UIGestureRecognizerStateBegan:
+            //当没有点击到cell的时候不进行处理
+            if (!indexPath) {
+                break;
+            }
+            
+            //开始移动，获取数据源方法collectionView: canMoveItemAtIndexPath:当前indexpatch返回的值，是yes还是NO
+            [_collectionView beginInteractiveMovementForItemAtIndexPath:indexPath];
+            break;
+        case UIGestureRecognizerStateChanged:
+        {
+            //注意： 不允许移动到最后一个站位cell的位置！！！(但是这个不是太准确，还是可以移动到的，下面有个补救措施)
+            ZHConnectionModel *fmodel = self.firstSectionArray.lastObject;
+            if (indexPath.row == self.firstSectionArray.count -1  && fmodel.isVirtual) {
+                break;
+            }
+            //移动过程中更新位置坐标
+            [_collectionView updateInteractiveMovementTargetPosition:point];
+            break;
+        }
+            
+        case UIGestureRecognizerStateEnded:
+            //停止移动调用此方法
+            //会响应相应的datasource方法，collectionView:moveItemAtIndexPath:toIndexPath:
+            [_collectionView endInteractiveMovement];
+            break;
+        default:
+            //取消移动, 取消移动的时候调用，会返回最原始的位置。
+            [_collectionView cancelInteractiveMovement];
+            break;
+    }
+}
 #pragma mark - UICollectionViewDataSource
 
 //多少section
@@ -411,13 +454,49 @@ static NSString * const reuseIdentifierFooter = @"footer";
     }
 }
 //是否允许移动 ios9.0
-//- (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath {
-//
-//}
+
+/**
+ 在开始移动的时候会调用这个方法，如果有特殊的单元格不想被移动可以return NO， 如果没有限制就返回YES 吧。
+ */
+- (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"开始移动");
+    //1. 非编辑状态不能移动
+    if (!_isEditing) return NO;
+    if (indexPath.section == 0) {
+        ZHConnectionModel *fmodel = self.firstSectionArray[indexPath.row];
+        //2. 站位cell不能移动
+        if (fmodel.isVirtual) return NO;
+        //3. 可以移动
+        return YES;
+    }else{
+        //4. 第1section不能移动
+        return NO;
+    }
+}
 //移动item ios9.0
-//- (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath*)destinationIndexPath NS_AVAILABLE_IOS(9_0){
-//
-//}
+
+/**
+ 移动结束的时候会调用此datasource，想要拖拽完成之后数据正确必须实现此方法，使用新的路径更新数据源，如果不实现此方法，刚刚移动cell中的数据不会重新排列。
+
+ @param collectionView 正在响应这个方法的collectionView
+ @param sourceIndexPath 原始移动的indexpath
+ @param destinationIndexPath 移动到目标位置的indexpath
+ */
+- (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath*)destinationIndexPath {
+    NSLog(@"结束移动");
+    //0.补救措施！！！： 如果站位item被移动到非最后一个了，那么要移动失败
+    ZHConnectionModel *flmodel = self.firstSectionArray.lastObject;
+    if (flmodel.isVirtual && (destinationIndexPath.row == self.firstSectionArray.count -1)) {
+        [collectionView reloadData];
+        return;
+    }
+    //1. 移除源数据
+    ZHConnectionModel *fmodel = self.firstSectionArray[sourceIndexPath.row];
+    [self.firstSectionArray removeObject:fmodel];
+    //2. 将源数据插入到目的数据
+    [self.firstSectionArray insertObject:fmodel atIndex:destinationIndexPath.row];
+    
+}
 
 //详细设置布局
 #pragma mark - UICollectionViewDelegateFlowLayout

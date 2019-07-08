@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *addDebtn;
 @property (weak, nonatomic) IBOutlet UIImageView *coimageView;
 @property (weak, nonatomic) IBOutlet UILabel *title;
+@property (weak, nonatomic) IBOutlet UIImageView *virTualImageView;
 
 @end
 
@@ -29,12 +30,15 @@
     
     if (model.isVirtual) {
         _title.hidden = YES;
-        _coimageView.image = [UIImage imageNamed:@"icon_bala29"];
+        _coimageView.hidden = YES;
         _addDebtn.hidden = YES;
         _pictureOffCons.constant = 0;
         self.contentView.backgroundColor = UIColor.whiteColor;
+        _virTualImageView.hidden = NO;
     }else{
         self.contentView.backgroundColor = UIColor.lightGrayColor;
+        _virTualImageView.hidden = YES;
+        _coimageView.hidden = NO;
         _title.text = model.title;
         _coimageView.image = [UIImage imageNamed:model.pic];
         _addDebtn.hidden = !model.isRightBtn;
