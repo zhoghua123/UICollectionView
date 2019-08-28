@@ -186,7 +186,7 @@ static NSString * const reuseIdentifierFooter = @"footer";
         for (ZHConnectionModel *model in self.firstSectionArray) {
             model.isRightBtn = YES;
             model.isTitle = YES;
-            model.isAdd = ![self checkHaveObjectWithModel:model];
+            model.isAdd = NO;
         }
         //1section
         for (ZHConnectionModel *model in self.secondSectionArray) {
@@ -212,15 +212,6 @@ static NSString * const reuseIdentifierFooter = @"footer";
 }
 
 
-/**
- 核查是否在secondSectionArray数组中
- */
--(BOOL)checkHaveObjectWithModel:(ZHConnectionModel *)model{
-    for (ZHConnectionModel *temmodel in self.secondSectionArray) {
-        if ([model.title isEqualToString:temmodel.title]) return YES;
-    }
-    return NO;
-}
 /**
  核查是否在firstSectionArray数组中
  */
